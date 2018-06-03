@@ -5,7 +5,7 @@ import tornado.websocket
 
 from router import router
 
-application = tornado.web.Application(router.route.urls)
+application = tornado.web.Application(router.routes)
 
 if __name__ == "__main__":
     application.listen(8888)
