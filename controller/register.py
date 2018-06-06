@@ -25,36 +25,19 @@ class RegisterHandler(tornado.web.RequestHandler):
         self.username = data['username']
         self.password = data['password']
         self.email = data['email']
+        self.id = self.createUserId()
 
-        if (self.searchUsername()):
-            result = {
-                'success': False,
-                'message': '用户名重复或者错误',
-                'status': 403
-            }
-            self.write(json_encode(result))
-        else:
-            self.id = self.createUserId()
-            self.insertUser()
-
-    #判断是否重名
-    def searchUsername(self):
-        session = user.DBSession()
-        User = user.User
-        userTuple = session.query(User).filter(User.username == self.username).all()
-        if (userTuple.id):
-            return True
-        else: 
-            return False
+        self.insertUser()
 
     #创建userid
     def createUserId(self):
-        self.id = uuid.uuid3(uuid.NAMESPACE_DNS, self.username)
+        self.userid = str(uuid.uuid3(uuid.NAMESPACE_DNS, self.username))
 
+    #插入数据
     def insertUser(self):
         session = user.DBSession()
         try:
-            new_user = user.User(id=self.id, username=self.username, password=self.password, email=self.email)
+            new_user = user.User(userid=self.userid, username=self.username, password=self.password, email=self.email, auth=False)
             session.add(new_user)
             session.commit()
             result = {
@@ -66,7 +49,7 @@ class RegisterHandler(tornado.web.RequestHandler):
         except Exception:
             result = {
                 'success': False,
-                'message': '创建账户失败',
+                'message': '创建账户失败，可能用户名重复',
                 'status': 403
             }
             self.write(json_encode(result))
