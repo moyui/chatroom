@@ -1,18 +1,18 @@
 #-*-coding:utf-8-*-
-from sqlalchemy import Column, String, create_engine
+from sqlalchemy import Column, String, create_engine, Boolean
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-import pymysql
 
 Base = declarative_base()
 
 class User(Base):
     __tablename__  = 'user'
 
-    id = Column(String(100), primary_key=True)
-    username = Column(String(100))
-    password = Column(String(100))
-    email = Column(String(100))
+    userid = Column(String(255), primary_key=True, unique=True)
+    username = Column(String(255), unique=True)
+    password = Column(String(255))
+    email = Column(String(255))
+    auth = Column(Boolean)
 
-engine = create_engine('mysql+pymysql://127.0.0.1:moyui@localhost:3306/test')
+engine = create_engine('mysql+pymysql://root:gao123456@localhost:3306/test',echo=True)
 DBSession = sessionmaker(bind=engine)
