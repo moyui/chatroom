@@ -3,10 +3,11 @@ import tornado.web
 import tornado.websocket
 import tornado.ioloop
 import uuid
+import json
 
 from tornado.escape import json_decode, json_encode
-from tornado import gen
 from model import user
+from controller.email import EmailHandler 
 
 session = user.DBSession()
 
@@ -31,7 +32,7 @@ class RegisterHandler(tornado.web.RequestHandler):
 
     #创建userid
     def createUserId(self):
-        self.userid = str(uuid.uuid3(uuid.NAMESPACE_DNS, self.username))
+        self.userid = str(uuid.uuid5(uuid.NAMESPACE_DNS, self.username))
 
     #插入数据
     def insertUser(self):
@@ -42,16 +43,17 @@ class RegisterHandler(tornado.web.RequestHandler):
             session.commit()
             result = {
                 'success': True,
-                'message': '成功创建账户',
+                'message': '成功创建账户,并已发送确认邮件',
                 'status': 201
             }
-            self.write(json_encode(result))
+            EmailHandler.sendEmail(self, self.userid)
+            self.write(json.dumps(result))
         except Exception:
             result = {
                 'success': False,
-                'message': '创建账户失败，可能用户名重复',
+                'message': '创建账户失败，用户名与邮箱不能重复',
                 'status': 403
             }
-            self.write(json_encode(result))
+            self.write(json.dumps(result))
         finally:
             session.close()
