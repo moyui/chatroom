@@ -6,27 +6,25 @@ import yagmail
 import setting
 import hashlib
 
-from email.mime.text import MIMEText
-from email.header import Header
+from tornado.escape import json_decode, json_encode
 from tornado import gen
 from model import user
+from controller.prpcrypt import pc
 
-yag = yagmail.SMTP()
 session = user.DBSession()
 
 class EmailHandler(tornado.web.RequestHandler):
-
-    def sendEmail(self, email):
-        userInfo = yield session.query(user.User).filter(user.User.email == email).one()
-        userid = userInfo.userid
+    def sendEmail(self, userid):
+        yag = yagmail.SMTP(user=setting.EMAIL_FROM, password=setting.EMAIL_HOST_PASSWORD, host=setting.EMAIL_SERVER)
+        userInfo = session.query(user.User).filter(user.User.userid == userid).one()
+        email = userInfo.email
         #调用加密函数
-        hash_md5 = self.createMd5(userid)
+        encryptcode = pc.encrypt(userid)
 
-        msg = MIMEText('''<html>
-                            <h3>这是一封来自moyui.site的注册邮件</h3>
-                            <p>点击以下链接完成注册</p>
-                            <a href="http://{}/">''')
+        msg = ['''<html>
+                    <h3>这是一封来自moyui.site的注册邮件</h3>
+                    <p>点击以下链接完成注册</p>
+                    <a href="{}/user/{}/confirmation?email={}" target="_blank">确认注册</a>
+                    '''.format(setting.SERVER_ADDRESS, encryptcode, email)]
 
-    def createMd5(self, userid):
-        hash_md5 = hashlib.md5(userid)
-        return hash_md5
+        yag.send(email, '注册确认', msg)
