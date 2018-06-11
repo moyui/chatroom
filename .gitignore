@@ -1,4 +1,3 @@
 .vscode/
 .git/
-.setting/
-setting.py
+server/setting.py
