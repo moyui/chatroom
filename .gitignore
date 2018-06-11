@@ -1,3 +1,4 @@
 .vscode/
 .git/
 server/setting.py
+node_modules/
