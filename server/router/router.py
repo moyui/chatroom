@@ -8,7 +8,7 @@ from controller import confirm
 from controller import chatroom
 
 routes = [
-    (r"/api/user/registration", register.RegisterHandler),
-    (r"/api/user/(?P<userid>.*)/confirmation", confirm.ConfirmHandler),
-    (r"/api/chatroom", chatroom.ChatSocketHandler)
+    (r"/apipy/user/registration", register.RegisterHandler),
+    (r"/apipy/user/(?P<userid>.*)/confirmation", confirm.ConfirmHandler),
+    (r"/apipy/chatroom", chatroom.ChatSocketHandler)
 ]
