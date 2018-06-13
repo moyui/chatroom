@@ -5,6 +5,7 @@ import tornado.ioloop
 import uuid
 import json
 
+from controller.prpcrypt import pc
 from tornado.escape import json_decode, json_encode
 from model import user
 from controller.email import EmailHandler 
@@ -24,7 +25,7 @@ class RegisterHandler(tornado.web.RequestHandler):
             self.write(json_encode(result))
 
         self.username = data['username']
-        self.password = data['password']
+        self.password = pc.encrypt(data['password'])
         self.email = data['email']
         self.id = self.createUserId()
 
@@ -32,7 +33,8 @@ class RegisterHandler(tornado.web.RequestHandler):
 
     #创建userid
     def createUserId(self):
-        self.userid = str(uuid.uuid5(uuid.NAMESPACE_DNS, self.username))
+        #确保只有32位
+        self.userid = str(uuid.uuid5(uuid.NAMESPACE_DNS, self.username))[:32]
 
     #插入数据
     def insertUser(self):
@@ -44,7 +46,8 @@ class RegisterHandler(tornado.web.RequestHandler):
             result = {
                 'success': True,
                 'message': '成功创建账户,并已发送确认邮件',
-                'status': 201
+                'status': 201,
+                'token': pc.encrypt(self.userid)
             }
             EmailHandler.sendEmail(self, self.userid)
             self.write(json.dumps(result))

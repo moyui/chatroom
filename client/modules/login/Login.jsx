@@ -8,6 +8,18 @@ class Login extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            hint: '',
+            type: 'login'
+        }
+
+        this.handleRegister = this.handleRegister.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+        this.switchRender = this.switchRender.bind(this);
+    }
+
+    componentDidMount() {
+        this.preLogin();
     }
 
     handleRegister() {
@@ -19,9 +31,60 @@ class Login extends Component {
             const returnValue = JSON.parse(encodeURIComponent(res));
 
             switch (returnValue.status) {
-                ''
+                case '500': this.showHint(returnValue.message);break;
+                case '403': this.showHint(returnValue.message);break;
+                case '201': this.showHint(returnValue.message);
+                    this.switchRender('login');
+                    window.localStorage.setItem('token', returnValue.token);
+                    break;
+                default: this.showHint('发生未知错误!');break;
             }
         })
+    }
+
+    handleLogin(token = '') {
+        axios.post('/apipy/user/login', JSON.stringify({
+            'email': this.email.getValue(),
+            'password': this.password.getValue(),
+            'token': token
+        })).then((res) => {
+            const returnValue = JSON.parse(encodeURIComponent(res));
+
+            switch (returnValue.status) {
+                case '401': this.showHint(returnValue);break;
+                case '404': this.showHint(returnValue);break;
+                case '200': this.showHint(returnValue);
+                    // 发送dispatch
+                    // 跳转
+                    window.localStorage.setItem('token', returnValue.token);
+                    break;
+                default: this.showHint('发生未知错误，请重试!');break;
+            }
+        })
+    }
+
+    showHint(message) {
+        this.setState({
+            hint: message
+        })
+    }
+
+    switchRender(type) {
+        this.setState({
+            type: type
+        })
+    }
+
+    /**
+     * 启动页面时直接登录
+     */
+    preLogin() {
+        const token = window.localStorage.getItem('token') || null;
+        if (token) {
+            this.handleLogin(token);
+        } else {
+            this.switchRender('login');
+        }
     }
 
     renderRegister() {
@@ -37,6 +100,7 @@ class Login extends Component {
                 <label>电子邮箱：
                     <Input type="text" ref={i => this.email = i} />
                 </label>
+                <p>{this.state.hint}</p>
                 <button onClick={this.handleRegister}>注册</button>
             </fieldset>
         )
@@ -52,18 +116,26 @@ class Login extends Component {
                 <label>密码：
                     <Input type="password" ref={i => this.password = i} />
                 </label>
-                <button>登录</button>
-                <button>注册入口在这里~</button>
+                <p>{this.state.hint}</p>
+                <button onClick={this.handleLogin}>登录</button>
+                <button onClick={e => this.switchRender('register')}>注册入口在这里~</button>
             </fieldset>
         )
     }
 
     render() {
-        const renderChoice = 1;
+        const type = this.state.type;
+        const renderChoice = type === 'register' ? this.handleRegister : this.renderLogin;
 
         return (
             <div>
-                {renderChoice}
+                <div>
+                    {renderChoice()}
+                </div>
+                <ul>
+                    <li>注册</li>
+                    <li>登录</li>
+                </ul>
             </div>
         );
 

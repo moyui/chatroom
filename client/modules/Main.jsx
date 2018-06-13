@@ -6,9 +6,9 @@ export const TopBar = (props) => {
     const { userName } = props;
 
     return (
-        <aside>
+        <header>
             <h4>{ userName ? userName : '未知生物喵~' }</h4>
-        </aside>
+        </header>
     )
 }
 
