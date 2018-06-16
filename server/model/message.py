@@ -12,7 +12,7 @@ class Message(Base):
     messageid = Column(BigInteger, primary_key=True, unique=True)
     userid = Column(String(40), ForeignKey('user.userid'))
     content = Column(Text)
-    date = Column(Time)
+    time = Column(Time)
 
 engine = create_engine('mysql+pymysql://{}:{}@{}:{}/{}'.format(DATABASE_ACCOUNT, DATABASE_PASSWORD, DATABASE_ADDRESS, DATABASE_PORT, DATABASE_BRANCH),echo=True,max_overflow=5)
 DBSession = sessionmaker(bind=engine)

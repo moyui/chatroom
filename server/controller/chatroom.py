@@ -6,7 +6,8 @@ import tornado.web
 import tornado.websocket
 import json
 
-
+from controller.prpcrypt import pc
+from datetime import datetime
 from model import message
 session = message.DBSession()
         
@@ -36,16 +37,26 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
                 logging.error("发送错误", exec_info=True)
 
 
-    async def on_message(self, message):
+    def on_message(self, message):
         parsed = tornado.escape.json_decode(message)
-        chat = {
-            "userid": parsed.userid,
-            "content": parsed.content,
-            "username": parsed.username
-        }
-        new_message = message.Message(userid=parsed.userid, content=parsed.content)
+        time = datetime.now()
+        #解密
+        userid = pc.decrypt(parsed.userid)
+
+        new_message = message.Message(userid=userid, content=parsed.content, time=time)
         session.add(new_message)
-        #直接异步掉 
-        await session.commit()
-        ChatSocketHandler.update_cache(chat)
-        ChatSocketHandler.send_updates(chat)
+        session.commit()
+
+        #这查询太耗时间了,有待重构
+        this_message = session.query(message.Message).filter(message.Message.userid == parsed.userid).order_by(message.Message.time.desc()).first()
+
+        if (this_message):
+            chat = {
+                "messageid": this_message.messageid,
+                "content": parsed.content,
+                "username": parsed.username,
+                "time": time
+            }
+
+            ChatSocketHandler.update_cache(chat)
+            ChatSocketHandler.send_updates(chat)            

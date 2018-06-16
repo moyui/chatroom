@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter as Router } from 'react-router-dom';
 
-import { socket }  from './socket.js';
 import { App } from './App.jsx';
+import store from './Store'; 
 
 ReactDOM.render(
-    <Router>
-        <Provider store={store}>
+    <Provider store={store}>
+        <Router> 
             <App />
-        </Provider>
-    </Router>,
+        </Router>
+    </Provider>,
     document.getElementById('app')
 );
 

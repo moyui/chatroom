@@ -7,14 +7,18 @@ export const TopBar = (props) => {
 
     return (
         <header>
-            <h4>{ userName ? userName : '未知生物喵~' }</h4>
+            <span>{ userName }</span>
+            <span>{ email } </span>
         </header>
     )
 }
 
 const mapStateToProps = (state) => {
+    const { user } = state
+
     return {
-        userName: state.userName
+        userName: user.userName,
+        email: user.email
     }
 };
 

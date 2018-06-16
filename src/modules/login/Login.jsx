@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
-import Input from '@/compoents/Input';
+import Input from '@/components/Input';
+import actions from './actions'; 
 
 class Login extends Component {
     constructor(props) {
@@ -31,7 +33,7 @@ class Login extends Component {
             const returnValue = JSON.parse(encodeURIComponent(res));
 
             switch (returnValue.status) {
-                case '500': this.showHint(returnValue.message);break;
+                case '500': 
                 case '403': this.showHint(returnValue.message);break;
                 case '201': this.showHint(returnValue.message);
                     this.switchRender('login');
@@ -51,12 +53,18 @@ class Login extends Component {
             const returnValue = JSON.parse(encodeURIComponent(res));
 
             switch (returnValue.status) {
-                case '401': this.showHint(returnValue);break;
+                case '401': 
                 case '404': this.showHint(returnValue);break;
                 case '200': this.showHint(returnValue);
-                    // 发送dispatch
-                    // 跳转
+                    this.props.setUser({
+                        userName: returnValue.username,
+                        email: returnValue.email
+                    });
                     window.localStorage.setItem('token', returnValue.token);
+                    //登录
+                    
+                    //跳转路由
+                    this.props.history.push('/chatroom');
                     break;
                 default: this.showHint('发生未知错误，请重试!');break;
             }
@@ -133,11 +141,23 @@ class Login extends Component {
                     {renderChoice()}
                 </div>
                 <ul>
-                    <li>注册</li>
-                    <li>登录</li>
+                    <li onClick={e => this.switchRender('register')}>注册</li>
+                    <li onClick={e => this.switchRender('Login')}>登录</li>
                 </ul>
             </div>
         );
 
     }
 }
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setUser: (user) => {
+            dispatch(actions.setUser(user));
+        } 
+    }
+}
+
+export default withRouter(connect(null, mapDispatchToProps)(Login));
+
+
