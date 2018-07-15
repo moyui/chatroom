@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
-import Input from '@/components/Input';
+import setting from '../../setting';
+import Input from '../../components/Input';
 import actions from './actions'; 
+import style from './Login.css';
 
 class Login extends Component {
     constructor(props) {
@@ -25,40 +27,45 @@ class Login extends Component {
     }
 
     handleRegister() {
-        axios.post('/apipy/user/registration', JSON.stringify({
+        axios.post(setting.serverApi + '/apipy/user/registration', JSON.stringify({
             'username': this.username.getValue(),
             'password': this.password.getValue(),
-            'emali': this.email.getValue()
+            'email': this.email.getValue()
         })).then((res) => {
-            const returnValue = JSON.parse(encodeURIComponent(res));
+            const returnValue = res.data;
 
             switch (returnValue.status) {
-                case '500': 
-                case '403': this.showHint(returnValue.message);break;
-                case '201': this.showHint(returnValue.message);
+                case 500: 
+                case 403: alert('发现未知错误，请重试看看呢！');break;
+                case 201: 
+                    alert('注册成功，要切换去登录喽！');
                     this.switchRender('login');
                     window.localStorage.setItem('token', returnValue.token);
                     break;
-                default: this.showHint('发生未知错误!');break;
+                default: alert('未知错误，请重试看看呢！');break;
             }
+        },(rej) => {
+            alert('发现未知错误，请重试看看呢！');
         })
     }
 
-    handleLogin(token = '') {
-        axios.post('/apipy/user/login', JSON.stringify({
+    handleLogin(self, token = '') {
+        axios.post(setting.serverApi + '/apipy/user/login', JSON.stringify({
             'email': this.email.getValue(),
             'password': this.password.getValue(),
             'token': token
         })).then((res) => {
-            const returnValue = JSON.parse(encodeURIComponent(res));
+            console.log(res.data);
+            const returnValue = res.data;
 
             switch (returnValue.status) {
-                case '401': 
-                case '404': this.showHint(returnValue);break;
-                case '200': this.showHint(returnValue);
+                case 401: 
+                case 404:
+                    alert(returnValue.message);break;
+                case 200: 
                     this.props.setUser({
-                        userName: returnValue.username,
-                        email: returnValue.email
+                        userName: returnValue.payload.username,
+                        email: returnValue.payload.email
                     });
                     window.localStorage.setItem('token', returnValue.token);
                     //登录
@@ -66,8 +73,10 @@ class Login extends Component {
                     //跳转路由
                     this.props.history.push('/chatroom');
                     break;
-                default: this.showHint('发生未知错误，请重试!');break;
+                default: window.alert('发生未知错误，请重试!');break;
             }
+        }, (rej) => {
+            alert('发现错误，可能是无账号或密码错误呢！要不去邮箱认证一下？');
         })
     }
 
@@ -89,7 +98,7 @@ class Login extends Component {
     preLogin() {
         const token = window.localStorage.getItem('token') || null;
         if (token) {
-            this.handleLogin(token);
+            this.handleLogin(null, token);
         } else {
             this.switchRender('login');
         }
@@ -97,52 +106,74 @@ class Login extends Component {
 
     renderRegister() {
         return (
-            <fieldset>
-                <legend>注册</legend>
-                <label>用户名：
-                    <Input type="text" ref={i => this.username = i} />
+            <div className={style.login}>
+                <h3 className={style.h3}>注册</h3>
+                <label className={style.input}>用户名：
+                    <Input 
+                        type="text" 
+                        placeholder="请输入用户名"
+                        button="清除"
+                        ref={i => this.username = i} 
+                    />
                 </label>
-                <label>密码：
-                    <Input type="password" ref={i => this.password = i} />
+                <label className={style.input}>密码：
+                    <Input 
+                        type="password" 
+                        placeholder="请输入密码"
+                        button="清除"
+                        ref={i => this.password = i} />
                 </label>
-                <label>电子邮箱：
-                    <Input type="text" ref={i => this.email = i} />
+                <label className={style.input}>电子邮箱：
+                    <Input 
+                        type="text"
+                        placeholder="请输入电子邮箱"
+                        button="清除" 
+                        ref={i => this.email = i} />
                 </label>
-                <p>{this.state.hint}</p>
-                <button onClick={this.handleRegister}>注册</button>
-            </fieldset>
+                <div className={style.loginButton}>
+                    <button onClick={this.handleRegister}>注册</button>
+                </div>
+            </div>
         )
     }
 
     renderLogin() {
         return (
-            <fieldset>
-                <legend>登录</legend>
-                <label>电子邮箱：
-                    <Input type="text" ref={i => this.email = i} />
+            <div className={style.login}>
+                <h3 className={style.h3}>登录</h3>
+                <label className={style.input}>电子邮箱：
+                    <Input 
+                        type="text" 
+                        placeholder="请输入用户名"
+                        button="清除"
+                        ref={i => this.email = i} 
+                    />
                 </label>
-                <label>密码：
-                    <Input type="password" ref={i => this.password = i} />
+                <label className={style.input}>密码：
+                    <Input 
+                        type="password" 
+                        placeholder="请输入密码"
+                        button="清除"
+                        ref={i => this.password = i} />
                 </label>
-                <p>{this.state.hint}</p>
-                <button onClick={this.handleLogin}>登录</button>
-                <button onClick={e => this.switchRender('register')}>注册入口在这里~</button>
-            </fieldset>
+                <div className={style.loginButton}>
+                    <button onClick={this.handleLogin}>登录</button>
+                    <h5 onClick={e => this.switchRender('register')}>注册入口在这里~</h5>
+                </div>
+            </div>
         )
     }
 
     render() {
         const type = this.state.type;
-        const renderChoice = type === 'register' ? this.handleRegister : this.renderLogin;
+        const renderChoice = type === 'register' ? this.renderRegister : this.renderLogin;
 
         return (
-            <div>
-                <div>
-                    {renderChoice()}
-                </div>
-                <ul>
-                    <li onClick={e => this.switchRender('register')}>注册</li>
-                    <li onClick={e => this.switchRender('Login')}>登录</li>
+            <div className={style.main}>
+                {renderChoice.bind(this)()}
+                <ul className={style.switchButton}>
+                    <li onClick={e => this.switchRender('register')}>注册页面</li>
+                    <li onClick={e => this.switchRender('login')}>登录页面</li>
                 </ul>
             </div>
         );

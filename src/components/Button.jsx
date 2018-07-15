@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 
+import './style.global.css';
+
 class Button extends Component {
     render () {
         const { onClick, children, type } = this.props;
 
         return (
             <button 
-                className={`compoent-button-${type}`}
+                className={`component-button-${type}`}
                 onClick={onClick}
             >
                {children}

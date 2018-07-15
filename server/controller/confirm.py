@@ -20,27 +20,15 @@ class ConfirmHandler(tornado.web.RequestHandler):
             userInfo.auth = True
             try:
                 session.commit()
-                result = {
-                    'success': True,
-                    'message': '认证成功',
-                    'status': 201
-                }
+                result = 'register successed'
                 self.write(json.dumps(result))
             except Exception:
                 session.rollback()
-                result = {
-                    'success': False,
-                    'message': '认证失败',
-                    'status': 500
-                }
+                result = 'register failed'
                 self.write(json.dumps(result))
             finally:
                 session.close()
         else:
-            result = {
-                'success': False,
-                'message': '无此用户',
-                'status': 404
-            }
+            result = 'no person'
             self.write(json.dumps(result))
         session.close()

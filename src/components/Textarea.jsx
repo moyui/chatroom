@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import './style.global.css'
+
 class Textarea extends Component {
     constructor(props) {
         super(props);
@@ -57,16 +59,15 @@ class Textarea extends Component {
         const { value } = this.state;
 
         return (
-            <div className="component-textarea">
-                <textarea
-                    value={value}
-                    onInput={this.handleInput}
-                    ref={i => this.input = i}
-                    onKeyDown={this.handleKeyDown}
-                    onCompositionStart={this.handleIMEStart}
-                    onCompositionEnd={this.handleIMEEnd}
-                />
-            </div>
+            <textarea
+                className="component-textarea"
+                value={value}
+                onInput={this.handleInput}
+                ref={i => this.input = i}
+                onKeyDown={this.handleKeyDown}
+                onCompositionStart={this.handleIMEStart}
+                onCompositionEnd={this.handleIMEEnd}
+            />
         )
     }
 }

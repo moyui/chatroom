@@ -5,13 +5,13 @@ import Button from './Button';
 class IconButton extends Button {
     render() {
         const {
-            width, height, icon, iconSize, onClick, style, 
+            width, height, icon, iconSize, onClick, style, children
         } = this.props;
 
         return (
-            <div className="component-iconButton" style={Object.assign({ width, height }, style)} onClick={onClick}>
-                <i className={`icon-${icon}`} />
-            </div>
+            <button className="component-iconButton" style={Object.assign({ width, height }, style)} onClick={onClick}>
+                <i className={`icon-${icon}`} />{children}
+            </button>
         )
     }
 }

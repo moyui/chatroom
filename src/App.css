@@ -1,0 +1,28 @@
+.body {
+    height: 100%;
+    width: 100%;
+    background-image: url('./static/i/bg.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glass {
+    opacity: 0.5;
+    position: fixed;
+    width: 900px;
+    height: 500px;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.display {
+    position: relative;
+    width: 900px;
+    height: 500px;
+    display: flex;
+    box-sizing: border-box;
+    padding: 20px;
+}

@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Message } from './Message';
+import style from './Chat.css';
 
 class MessageList extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     renderMessage(message) {
         const props = {
             key: message.messageId,
-            userName: message.userName === myName ? '我' : message.userName,
+            userName: message.userName === this.props.myName ? '我' : message.userName,
             time: message.time,
             content: message.content
         }
@@ -21,12 +19,12 @@ class MessageList extends Component {
     }
 
     render() {
-        messages = this.props.messages;
+        const messages = this.props.messages;
         return (
-            <div>
+            <div className={style.messageList}>
                 {
                     messages.map(message => {
-                        this.renderMessage(message);
+                        return this.renderMessage(message);
                     })
                 }
             </div>
@@ -35,9 +33,10 @@ class MessageList extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { messages } = state;
+    const { messages, user } = state;
     return {
-        messages: messages
+        messages: messages,
+        myName: user.userName
     }
 }
 

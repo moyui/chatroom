@@ -1,0 +1,65 @@
+.component-button-exit {
+    width: 60px;
+    height: 30px;
+    font-size: 12px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    transition: all ease-out 0.5s;
+    position: absolute;
+    transform: translateX(-50%);
+    bottom: 20px;
+}
+
+.component-button-exit:hover {
+    color: white;
+    background-color: grey;
+    transition: all ease-in 0.5s;
+}
+
+.component-input {
+    display: flex;
+    width: 100%;
+}
+
+.component-input > input {
+    margin-top: 10px;
+    width: 400px;
+    height: 30px;
+    font-size: 14px;
+    color: black;
+    text-indent: 10px;
+    border-bottom: 1px solid grey;
+}
+
+.component-iconButton {
+    position: absolute;
+    right: 60px;
+    margin-top: 10px;
+    font-size: 14px;
+    height: 30px;
+    font-size: 12px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    transition: all ease-out 0.5s;
+}
+
+.component-iconButton:hover {
+    color: white;
+    background-color: grey;
+    transition: all ease-in 0.2s;
+}
+
+input:-webkit-autofill { 
+    -webkit-box-shadow: 0 0 0px 1000px rgb(255, 255, 255, 1) inset !important;
+} 
+
+textarea {
+    width: 280px;
+    height: 28px;
+    margin-top: 10px;
+    margin-left: 20px;
+    border: 1px solid grey;
+    font-size: 16px;
+    border-radius: 10px;
+    text-indent: 5px;
+}

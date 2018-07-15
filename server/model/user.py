@@ -15,5 +15,5 @@ class User(Base):
     email = Column(String(40), unique=True)
     auth = Column(Boolean)
 
-engine = create_engine('mysql+pymysql://{}:{}@{}:{}/{}'.format(DATABASE_ACCOUNT, DATABASE_PASSWORD, DATABASE_ADDRESS, DATABASE_PORT, DATABASE_BRANCH),echo=True,max_overflow=5)
+engine = create_engine('mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8'.format(DATABASE_ACCOUNT, DATABASE_PASSWORD, DATABASE_ADDRESS, DATABASE_PORT, DATABASE_BRANCH),echo=True,max_overflow=5)
 DBSession = sessionmaker(bind=engine)

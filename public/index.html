@@ -8,8 +8,82 @@
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
+    <!--[if lt IE 8]> 请使用更加高级的浏览器，比如Chrome，Firefox， IE11等<![endif]-->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <style>
+      /*css重置*/
+      html, body, ul, ol, li, p, h1, h2, h3, h4, h5, h6, form, fieldset, table, td, th, tr, img, div, dl, dt, dd, input, label, figure, button {
+        margin: 0;
+        padding: 0;
+      }
+      
+      input, textarea, select, button {
+        font-size: 0;
+      }
+      
+      /*自适应*/
+      input, textarea, img, video, object {
+        box-sizing: border-box;
+        -ms-box-sizing: border-box;
+      }
+      
+      /*firefox设置*/
+      img {  
+        display: inline-block;
+      }
+      
+      body {
+        font-family: "Arial", "Microsoft YaHei", sans-serif;
+      }
+      
+      li {
+        list-style: none;
+      }
+      
+      img {
+        border: none;
+      }
+      
+      h3, h4, h5 {
+        font-weight: normal;
+      }
+      
+      input, select, textarea, button {
+        background: none;
+        /*解决输入框兼容问题*/
+        outline: none;
+        /*聚焦时样式*/
+        border: none;
+        /*盒子模型*/
+        vertical-align: middle
+        /*对不齐的问题*/
+      }
+      
+      textarea {
+        resize: none;
+      }
+      
+      a {
+        text-decoration: none;
+        color: black;
+      }
+      
+      .clearfix:before,
+      .clearfix:after {
+        content: "";
+        display: block;
+        height: 0;
+        clear: both;
+      }
+      html,body {
+        height: 100%
+      }
+      #root {
+        height: 100%;
+        font-size: 16px;
+      }
+    </style>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -19,22 +93,9 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>moyui的聊天室</title>
   </head>
   <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

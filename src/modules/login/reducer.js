@@ -5,8 +5,8 @@ const userReducer = (state = {
     switch (action.type) {
         case 'SETUSER': {
             return Object.assign({}, state, {
-                userName: action.userName,
-                email: action.email
+                userName: action.data.userName,
+                email: action.data.email
             });
         }
         default: return state;

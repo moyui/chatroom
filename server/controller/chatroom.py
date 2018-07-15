@@ -4,6 +4,7 @@ import asyncio
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
+import time
 import json
 
 from controller.prpcrypt import pc
@@ -15,6 +16,9 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
     waiters = set()
     cache = []
     cache_size = 200
+
+    def check_origin(self, origin):
+        return True
 
     def open(self):
         ChatSocketHandler.waiters.add(self)
@@ -30,32 +34,34 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
 
     @classmethod
     def send_updates(cls, chat):
+        print(chat)
         for waiter in cls.waiters:
             try:
-                waiter.write_message(chat)
+                waiter.write_message(json.dumps(chat))
             except:
                 logging.error("发送错误", exec_info=True)
 
 
-    def on_message(self, message):
-        parsed = tornado.escape.json_decode(message)
-        time = datetime.now()
+    def on_message(self, payload):
+        parsed = tornado.escape.json_decode(payload)
+        inputtime = datetime.now()
         #解密
-        userid = pc.decrypt(parsed.userid)
+        userid = pc.decrypt(parsed['token'])
 
-        new_message = message.Message(userid=userid, content=parsed.content, time=time)
+        new_message = message.Message(userid=userid, content=parsed['content'], time=inputtime)
         session.add(new_message)
         session.commit()
 
         #这查询太耗时间了,有待重构
-        this_message = session.query(message.Message).filter(message.Message.userid == parsed.userid).order_by(message.Message.time.desc()).first()
-
+        this_message = session.query(message.Message).filter(message.Message.userid == userid).order_by(message.Message.messageid.desc()).first()
+        parsedtime = inputtime.strftime('%Y-%m-%d %H:%M:%S')
+        print(parsedtime)
         if (this_message):
             chat = {
                 "messageid": this_message.messageid,
-                "content": parsed.content,
-                "username": parsed.username,
-                "time": time
+                "content": parsed['content'],
+                "username": parsed['userName'],
+                "time": parsedtime
             }
 
             ChatSocketHandler.update_cache(chat)
