@@ -18,11 +18,18 @@
   "homepage": "https://github.com/moyui/chatroom#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^1.0.0",
+    "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
     "webpack": "^4.16.0",
     "webpack-cli": "^3.0.8"
   },
   "dependencies": {
+    "command-line-args": "^5.0.2",
     "react": "^16.4.1",
     "redux": "^4.0.0",
     "socket.io": "^2.1.1"
