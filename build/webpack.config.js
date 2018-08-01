@@ -54,9 +54,6 @@ module.exports = {
                     name: utils.assetsPath('fonts/[name].[hash:8].[ext]'),
                 },
             },
-            {
-                
-            }
        ]
    }
 
