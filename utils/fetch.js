@@ -6,6 +6,7 @@ export default function fetch(event, data={}, {
 } = {}) {
     return new Promise((resolve) => {
         socket.emit(event, data, (res) => {
+            //保证errorfirst
             if (typeof res === 'string') {
                 if (toast) {
                     Message.error(res);
