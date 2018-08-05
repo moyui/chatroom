@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import autobind from 'autobind-decorator';
 
 import IconButton from './IconButton';
-
 import './style.global.css';
 
 class Input extends Component {
@@ -59,7 +59,7 @@ class Input extends Component {
 
     render() {
         const { value } = this.state;
-        const { type, placeholder, button } = this.props;
+        const { type, placeholder } = this.props;
 
         return (
             <div className="component-input">
@@ -73,7 +73,7 @@ class Input extends Component {
                     onCompositionStart={this.handleIMEStart}
                     onCompositionEnd={this.handleIMEEnd}
                 />
-                <IconButton width={70} height={30} iconSize={18} children={button} onClick={this.handleClickClear} />
+                <IconButton width={32} height={32} iconSize={18} icon="clear" onClick={this.handleClickClear} />
             </div>
         )
     }

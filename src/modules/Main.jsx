@@ -1,41 +1,20 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { immutableRenderDecorator } from 'react-immutable-render-mixin';
 
-import Button from '../components/Button';
-import style from './Main.css';
+import Sidebar from './sidebar/Sidebar';
+import ChatPanel from './chatPanel/ChatPanel';
+import './Main.less';
 
-class SideBar extends Component {
-    constructor(props) {
-        super(props);
-
-        this.exitLogin = this.exitLogin.bind(this);
-    }
-
-    exitLogin() {
-        window.localStorage.removeItem('token');
-        window.location.reload();
-    }
-
+@immutableRenderDecorator
+class Main extends Component {
     render() {
-        const { userName } = this.props;
-
         return (
-            <header className={style.header}>
-                <h2 className={style.h2}>moyui的聊天室</h2>
-                <span className={style.detail}>用户名：{ userName }</span>
-                <Button onClick={this.exitLogin} type="exit">退出登录</Button>
-            </header>
+            <div className="module-main">
+                <Sidebar />
+                <ChatPanel />
+            </div>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    const { user } = state
-
-    return {
-        userName: user.userName
-    }
-};
-
-export default withRouter(connect(mapStateToProps, null)(SideBar));
+export default Main;
