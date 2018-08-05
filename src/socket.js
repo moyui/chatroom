@@ -1,3 +1,9 @@
-import setting from './setting.js';
+import IO from 'socket.io-client';
 
-export const socket = new WebSocket(setting.server);
+import config from '../config/client';
+
+const options = {
+
+};
+const socket = new IO(config.server, options);
+export default socket;
