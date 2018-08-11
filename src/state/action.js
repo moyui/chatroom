@@ -114,3 +114,76 @@ function addLinkman(linkman, focus = false) {
         focus,
     });
 }
+
+function setGroupMembers(groupId, members) {
+    dispatch({
+        type: 'SetGroupMembers',
+        groupId,
+        members,
+    });
+}
+
+function setGroupAvatar(groupId, avatar) {
+    dispatch({
+        type: 'SetGroupAvatar',
+        groupId,
+        avatar,
+    });
+}
+
+function removeLinkman(linkmanId) {
+    dispatch({
+        type: 'RemoveLinkman',
+        linkmanId,
+    });
+}
+
+function logout() {
+    dispatch({
+        type: 'Logout',
+    });
+}
+
+function setPrimaryColor(color) {
+    dispatch({
+        type: 'SetDeepValue',
+        keys: ['ui', 'primaryColor'],
+        value: color,
+    });
+    window.localStorage.setItem('primaryColor', color);
+}
+
+function setPrimaryTextColor(color) {
+    dispatch({
+        type: 'SetDeepValue',
+        keys: ['ui', 'primaryTextColor'],
+        value: color,  
+    });
+    window.localStorage.setItem('primaryTextColor', color);
+}
+
+function setBackgroundImage(image) {
+    dispatch({
+        type: 'SetDeepValue',
+        keys: ['ui', 'backgroundImage'],
+        value: image,
+    });
+    windwo.localStorage.setItem('backgroundImage', image);
+}
+
+function setSound(sound) {
+    dispatch({
+        type: 'SetDeepValue',
+        keys: ['ui', 'soudn'],
+        value: sound,
+    });
+    window.localStorage.setItem('sound', sound);
+}
+
+function setSoundSwitch(value) {
+    dispatch({
+        type: 'SetDeepValue',
+        keys: ['ui', 'soundSwitch'],
+        value,
+    });
+}
