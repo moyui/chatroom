@@ -30,7 +30,7 @@ class Sidebar extends Component {
         window.localStorage.removeItem('token');
         Message.success('您已经退出登录');
         socket.disconnect();
-        //没看懂要干什么
+        //刷新用
         socket.connect();
     }
 

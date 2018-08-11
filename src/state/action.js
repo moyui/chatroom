@@ -115,6 +115,13 @@ function addLinkman(linkman, focus = false) {
     });
 }
 
+function setFocus(linkmanId) {
+    dispatch({
+        type: 'SetFocus',
+        linkmanId,
+    });
+}
+
 function setGroupMembers(groupId, members) {
     dispatch({
         type: 'SetGroupMembers',
@@ -141,6 +148,21 @@ function removeLinkman(linkmanId) {
 function logout() {
     dispatch({
         type: 'Logout',
+    });
+}
+
+function showLoginDialog() {
+    dispatch({
+        type: 'SetDeepValue',
+        keys: ['ui', 'showLoginDialog'],
+        value: true,
+    });
+}
+function closeLoginDialog() {
+    dispatch({
+        type: 'SetDeepValue',
+        keys: ['ui', 'showLoginDialog'],
+        value: false,
     });
 }
 
@@ -187,3 +209,34 @@ function setSoundSwitch(value) {
         value,
     });
 }
+
+export default {
+    setUser,
+    setGuest,
+    connect,
+    disconnect,
+    logout,
+    setAvatar,
+
+    setFocus,
+    setGroupMembers,
+    setGroupAvatar,
+    addLinkman,
+    removeLinkman,
+    setFriend,
+
+    addLinkmanMessage,
+    addLinkmanMessages,
+    updateSelfMessage,
+    deleteSelfMessage,
+
+    showLoginDialog,
+    closeLoginDialog,
+    setPrimaryColor,
+    setPrimaryTextColor,
+    setBackgroundImage,
+    setSound,
+    setSoundSwitch,
+    setNotificationSwitch,
+    setVoiceSwitch,
+};

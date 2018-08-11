@@ -67,6 +67,7 @@ class Input extends Component {
                     type={type}
                     placeholder={placeholder}
                     value={value}
+                    onChange={this.handleInput}
                     onInput={this.handleInput}
                     ref={i => this.input = i}
                     onKeyDown={this.handleKeyDown}
