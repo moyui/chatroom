@@ -10,7 +10,7 @@ class IconButton extends Button {
 
         return (
             <button className="component-iconButton" style={Object.assign({ width, height }, style)} onClick={onClick}>
-                <i className={`icon-${icon}`} />{children}
+                <i className={`iconfont icon-${icon}`} style={{ fontSize: iconSize, lineHeight: `${height}px` }}/>{children}
             </button>
         )
     }

@@ -36,7 +36,7 @@ async function guest() {
 socket.on('connect', async() => {
     const token = window.localStorage.getItem('token');
     if (token) {
-        cosnt [err, res] = await fetch('loginByToken', {
+        const [err, res] = await fetch('loginByToken', {
             token,
             os: platform.os.family,
             browser: platform.name,
@@ -45,7 +45,7 @@ socket.on('connect', async() => {
         if (err) {
             guest();
         } else {
-            actions.setUser(res);
+            action.setUser(res);
         }
     } else {
         guest();
@@ -62,16 +62,16 @@ socket.on('message', (message) => {
     convertRobot10Message(message);
     const state = store.getState();
     //判断这条消息是不是自己的
-    const isSelfMessage = message.form._id === state.getIn(['user', '_id']);
+    const isSelfMessage = message.from._id === state.getIn(['user', '_id']);
     //找到要发送的联系人
     const linkman = state.getIn(['user', 'linkmans']).find(item => item.get('_id') === message.to);
-    let title ='';
+    let title = '';
     if (linkman) {
-        action.addLinkManMessage(message.to, message);
+        action.addLinkmanMessage(message.to, message);
         if (linkman.get('type') === 'group') {
             title = `${message.from.username} 在 ${linkman.get('name')} 对大家说:`;
         } else {
-            title = `${message.from.username} 对你说：`;
+            title = `${message.from.username} 对你说:`;
         }
     //联系人不存在并且是自己发的消息、不创建新的联系人
     } else {
@@ -79,7 +79,7 @@ socket.on('message', (message) => {
             return;
         }
         //那这边应该是对面发送的消息
-        const newLinkMan = {
+        const newLinkman = {
             _id: getFriendId(
                 //得到对方id(自己id？)
                 state.getIn(['user', '_id']),
@@ -95,7 +95,7 @@ socket.on('message', (message) => {
             //没有读?
             unread: 1,
         };
-        action.addLinkMan(newLinkman);
+        action.addLinkman(newLinkman);
         title = `${message.from.username} 对你说:`;
     }
     fetch('getLinkmanHistoryMessages', { linkmanId: newLinkman._id })
@@ -110,7 +110,6 @@ socket.on('message', (message) => {
 
     //焦点转移
     if (windowStatus === 'blur' && state.getIn(['ui', 'notificationSwitch'])) {
-        //这段需要看看
         notification(
             title,
             message.from.avatar,
@@ -127,7 +126,7 @@ socket.on('message', (message) => {
     if (message.type === 'text' && state.getIn(['ui', 'voiceSwitch'])) {
         const text = message.content
         //只保留例如https://www.baidu.com/abcd -> https://#baidu.com#
-        .replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%._+~#?&//=]*)/g, '')
+        .replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g, '')
         .replace(/#/g, '');
     
         if (text.length > 100) {
@@ -146,7 +145,7 @@ socket.on('message', (message) => {
     }
 })
 
-ReactDOM.render(
+ReactDom.render(
     <Provider store={store}>
         <App />
     </Provider>,
