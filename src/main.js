@@ -138,7 +138,6 @@ socket.on('message', (message) => {
             :
             `${message.from.username}对你说`;
         if (text) {
-            //这个方法可能是重写了
             voice.push(from !== prevFrom ? from + text : text, message.from.username);
         }
         prevFrom = from;
