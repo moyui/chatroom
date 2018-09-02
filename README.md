@@ -3,7 +3,7 @@
 ## 技术栈
 
 ```
-react + redux + react-router + python + tornado + mysql
+react + redux + react-router + python + tornado + mongoDB
 即将切换为koa
 ```
 
